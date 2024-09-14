@@ -47,7 +47,7 @@ function App() {
             let sum = 0;
             querySnapshot.forEach((doc) => {
               const data = doc.data();
-              sum += data.points || 0;
+              sum += data.points || data.customPoints || 0;
             });
 
             return { house, points: sum };
