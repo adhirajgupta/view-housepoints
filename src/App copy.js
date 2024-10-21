@@ -63,7 +63,7 @@ function App() {
   }
 
   useEffect(() => {
-    // fetchHousesPoints();
+    fetchHousesPoints();
     fetchLatestFileData();
   }, []);
 
@@ -71,14 +71,14 @@ function App() {
     <div className="App">
       <header className="App-header">
         <div className="winners">
-          {Object.entries(latestData).map(([house, points]) => (
+          {housesPoints.map(({ house, points }) => (
             <div className={`house ${house.toLowerCase()}`} key={house}>
               <span>{house}</span>
               <span>Points: {points}</span>
             </div>
           ))}
         </div>
-        {/* <div className="latest-data">
+        <div className="latest-data">
           <h3>Latest Data from FileData:</h3>
           {Object.keys(latestData).length > 0 ? (
             <div>
@@ -91,7 +91,7 @@ function App() {
           ) : (
             <span>No latest data available</span>
           )}
-        </div> */}
+        </div>
       </header>
     </div>
   );
