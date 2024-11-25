@@ -34,51 +34,60 @@ function App() {
     }
   }
 
-  async function fetchLatestFileData() {
-    try {
-      const fileDataCollection = collection(db, 'FileData');
-      const querySnapshot = await getDocs(fileDataCollection);
+async function fetchLatestFileData() {
+  try {
+    const fileDataCollection = collection(db, 'FileData');
+    const querySnapshot = await getDocs(fileDataCollection);
 
-      // Store the latest document with respect to the date field
-      let latestDoc = null;
+    let latestDoc = null;
+    let latestTimestamp = null;
 
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        if (!latestDoc || new Date(data.date) > new Date(latestDoc.date)) {
-          latestDoc = data;
+    querySnapshot.forEach((doc) => {
+      const docName = doc.id; // Document name is expected to be a timestamp or date
+      const docDate = new Date(docName);
+
+      if (!isNaN(docDate.getTime())) { // Ensure the date is valid
+        if (!latestTimestamp || docDate > latestTimestamp) {
+          latestTimestamp = docDate;
+          latestDoc = doc.data();
         }
-      });
-
-      if (latestDoc) {
-        setLatestData({
-          Discoverers: latestDoc.Discoverers || 0,
-          Explorers: latestDoc.Explorers || 0,
-          Voyagers: latestDoc.Voyagers || 0,
-          Pioneers: latestDoc.Pioneers || 0,
-        });
       }
-    } catch (error) {
-      console.error('Error fetching latest file data:', error);
+    });
+
+    if (latestDoc) {
+      console.log("Latest document data:", latestDoc);
+      setLatestData({
+        Discoverers: latestDoc.Discoverers || 0,
+        Explorers: latestDoc.Explorers || 0,
+        Voyagers: latestDoc.Voyagers || 0,
+        Pioneers: latestDoc.Pioneers || 0,
+      });
+    } else {
+      console.log("No valid documents found.");
     }
+  } catch (error) {
+    console.error('Error fetching latest file data:', error);
   }
+}
 
-  useEffect(() => {
-    // fetchHousesPoints();
-    fetchLatestFileData();
-  }, []);
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <div className="winners">
-          {Object.entries(latestData).map(([house, points]) => (
-            <div className={`house ${house.toLowerCase()}`} key={house}>
-              <span>{house}</span>
-              <span>Points: {points}</span>
-            </div>
-          ))}
-        </div>
-        {/* <div className="latest-data">
+useEffect(() => {
+  // fetchHousesPoints();
+  fetchLatestFileData();
+}, []);
+
+return (
+  <div className="App">
+    <header className="App-header">
+      <div className="winners">
+        {Object.entries(latestData).map(([house, points]) => (
+          <div className={`house ${house.toLowerCase()}`} key={house}>
+            <span>{house}</span>
+            <span>Points: {points}</span>
+          </div>
+        ))}
+      </div>
+      {/* <div className="latest-data">
           <h3>Latest Data from FileData:</h3>
           {Object.keys(latestData).length > 0 ? (
             <div>
@@ -92,9 +101,9 @@ function App() {
             <span>No latest data available</span>
           )}
         </div> */}
-      </header>
-    </div>
-  );
+    </header>
+  </div>
+);
 }
 
 export default App;
