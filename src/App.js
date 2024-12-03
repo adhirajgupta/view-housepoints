@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { app } from './config';
+import HousePointsTable from './components/PointsBreakDown';
 
 // Initialize Firestore
 const db = getFirestore(app);
@@ -102,6 +103,7 @@ return (
           )}
         </div> */}
     </header>
+    <HousePointsTable/>
   </div>
 );
 }
