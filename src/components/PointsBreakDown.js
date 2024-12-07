@@ -1,11 +1,36 @@
-import React, { Component,useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { app } from '../config';
 
 const db = getFirestore(app);
+
 const HousePointsTable = () => {
   const [events, setEvents] = useState([]);
   const houses = ["Discoverers", "Explorers", "Voyagers", "Pioneers"];
+
+  const tableStyles = {
+    table: {
+      width: "100%",
+      borderCollapse: "collapse",
+      color: '#332e63',
+    },
+    th: {
+      border: "1px solid #ccc",
+      textAlign: "center",
+      padding: "8px",
+      fontWeight: 'bold',
+    },
+    td: {
+      border: "1px solid #ccc",
+      textAlign: "center",
+      padding: "8px",
+      fontWeight: "normal",
+      color:'#332e63'
+    },
+    firstColumn: {
+      textAlign: "left",
+    },
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,24 +58,24 @@ const HousePointsTable = () => {
 
   return (
     <div style={{ padding: "20px" }}>
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <table style={tableStyles.table}>
         <thead>
           <tr>
-            <th style={{ width: "40%", border: "1px solid #ccc", textAlign: "left", padding: "8px" }}>Event</th>
-            <th style={{ width: "10%", border: "1px solid #ccc", textAlign: "center", padding: "8px" }}>Place 1 (20 Points) </th>
-            <th style={{ width: "10%", border: "1px solid #ccc", textAlign: "center", padding: "8px" }}>Place 2 (15 Points) </th>
-            <th style={{ width: "10%", border: "1px solid #ccc", textAlign: "center", padding: "8px" }}>Place 3 (10 Points) </th>
-            <th style={{ width: "10%", border: "1px solid #ccc", textAlign: "center", padding: "8px" }}>Place 4 (05 Points) </th>
+            <th style={{ ...tableStyles.th, ...tableStyles.firstColumn }}>Event</th>
+            <th style={tableStyles.th}>Place 1 (20 Points)</th>
+            <th style={tableStyles.th}>Place 2 (15 Points)</th>
+            <th style={tableStyles.th}>Place 3 (10 Points)</th>
+            <th style={tableStyles.th}>Place 4 (05 Points)</th>
           </tr>
         </thead>
         <tbody>
           {events.map((event, index) => (
             <tr key={index}>
-              <td style={{ border: "1px solid #ccc", padding: "8px" }}>{event.event}</td>
-              <td style={{ border: "1px solid #ccc", textAlign: "center", padding: "8px" }}>{event[1] || "N/A"}</td>
-              <td style={{ border: "1px solid #ccc", textAlign: "center", padding: "8px" }}>{event[2] || "N/A"}</td>
-              <td style={{ border: "1px solid #ccc", textAlign: "center", padding: "8px" }}>{event[3] || "N/A"}</td>
-              <td style={{ border: "1px solid #ccc", textAlign: "center", padding: "8px" }}>{event[4] || "N/A"}</td>
+              <td style={{ ...tableStyles.td, ...tableStyles.firstColumn }}>{event.event}</td>
+              <td style={tableStyles.td}>{event[1] || "N/A"}</td>
+              <td style={tableStyles.td}>{event[2] || "N/A"}</td>
+              <td style={tableStyles.td}>{event[3] || "N/A"}</td>
+              <td style={tableStyles.td}>{event[4] || "N/A"}</td>
             </tr>
           ))}
         </tbody>
